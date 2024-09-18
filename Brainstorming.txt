@@ -1,0 +1,10 @@
+- ziel ordner angeben
+- dateien darin erkennen
+- bennenungsschema festlegen
+	- position der zahl
+	- name
+	- start zahl , schrittweite
+	- .Endung
+- bennenunng mit numerierung anwenden
+	- reihenfolge festlegen
+	- auto sortiert
