@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System.ComponentModel;
 using System.Windows;
+using System.Collections;
+using System.IO;
 using FileRenamer;
 
 
@@ -28,7 +30,10 @@ namespace FileRenamer
                 // Shorten the path to show only the lowest 3 directory names
                 _viewModel.dirInputContent = HelperMethods.ShortenPathToLowestDirectories(folderName);
                 // Set the full path as a ToolTip
-                txtBoxPath.ToolTip = folderName;
+                btnSetPath.ToolTip = folderName;
+
+                string[] folderContent = Directory.GetFiles(folderName);
+                
             }
         }
 
@@ -40,9 +45,34 @@ namespace FileRenamer
             }
         }
 
-        private void extensionInput_GotFocus(object sender, RoutedEventArgs e)
+
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settings = new Settings();
+            settings.Show();
+        }
+
+
+        private void prefixToggle_Checked(object sender, RoutedEventArgs e)
         {
 
         }
+
+        private void prefixToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void suffixToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            if (prefixToggle.IsChecked == true)
+            {
+                prefixToggle.IsChecked = false;
+            }
+        }
+
+        private void suffixToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }       
     }
 }

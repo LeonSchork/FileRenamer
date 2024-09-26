@@ -14,6 +14,9 @@
     <None Remove="images\settingsIcon.jpg" />
     <None Remove="images\settingsIcon2.png" />
     <None Remove="images\settingsIcon3.png" />
+    <None Remove="images\settingsIcon4.png" />
+    <None Remove="images\settingsIcon5.png" />
+    <None Remove="images\settingsIcon6.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,10 +32,22 @@
     <Content Include="images\settingsIcon3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\settingsIcon4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\settingsIcon6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="System\Windows\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="images\settingsIcon5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

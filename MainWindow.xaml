@@ -19,19 +19,38 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="320*"/>
                 <ColumnDefinition Width="240*"/>
-                <ColumnDefinition Width="51*"/>
+                <!--<ColumnDefinition Width="51*"/>-->
                 <ColumnDefinition Width="189*"/>
             </Grid.ColumnDefinitions>
             <!--Directory selection-->
-            <TextBlock x:Name="txtBoxPath" Text="{Binding dirInputContent}" FontSize="20" TextAlignment="Center" Margin="10,0,10,0" Foreground="Black" Background="LightGray" />
-            <Button x:Name="btnSetPath" Click="buttonSet_Click" Margin="10,0,10,0" Background="Transparent"/>
+            <TextBlock x:Name="txtBoxPath" Text="{Binding dirInputContent}" FontSize="20" TextAlignment="Center" Margin="20,0,10,0" Foreground="Black" Background="LightGray" />
+            <Button x:Name="btnSetPath" Click="buttonSet_Click" Margin="20,0,10,0" Background="Transparent"/>
             <!--Name input-->
             <TextBox Grid.Column="1" x:Name="nameInput" Cursor="IBeam" Text="{Binding nameInputContent}" FontSize="20" Margin="10,0,10,0" TextAlignment="Center" Foreground="Black" Background="LightGray" GotFocus="nameInput_GotFocus" />
-            <!--Number selection-->
-            <!--<TextBox Grid.Column="2" x:Name="extensionInput" Margin="10,0,10,0" FontSize="20" Text="Nr"  TextAlignment="Center" Foreground="Black" Background="LightGray" GotFocus="extensionInput_GotFocus"/>-->
-            <Button Grid.Column="2" x:Name="settingsButton" Margin="10,0,10,0">
-                <Image Source="images\settingsIcon3.png" Stretch="UniformToFill"/>
-            </Button>
+            <!--<Button Grid.Column="2" x:Name="settingsButton" Margin="10,0,10,0" Click="settingsButton_Click">
+                <Image Source="images\settingsIcon4.png" Stretch="Fill"/>
+            </Button>-->
+            <Button Grid.Column="3" x:Name="renameButton" Content="Umbenennen" Margin="10,0,20,0"/>
         </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="75*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <DataGrid Grid.Column="1" x:Name="folderContentGrid" Grid.RowSpan="5" Margin="20,0,20,0" Foreground="Black" Background="LightGray" ItemsSource="{Binding folderContent}" AutoGenerateColumns="True"/>
+            <DockPanel Margin="20,10,0,10" LastChildFill="False">
+                <ToggleButton x:Name="prefixToggle" Content="Nr. Prefix" Checked="prefixToggle_Checked" Unchecked="prefixToggle_Unchecked" Width="90"/>
+                <ToggleButton x:Name="suffixToggle" Content="Nr. Suffix" Checked="suffixToggle_Checked" Unchecked="suffixToggle_Unchecked" Width="90"/>
+                
+            </DockPanel>
+        </Grid>
+
     </Grid>
 </Window>
