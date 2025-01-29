@@ -1,0 +1,66 @@
+﻿<Window x:Class="FileRenamer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileRenamer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1000" Background="SlateGray">
+    <Window.Resources>
+        <local:FileSizeConverter x:Key="FileSizeConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        
+        <!--Folderpath Grid-->
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="FolderLocationTextBlock" Grid.Row="0" Grid.Column="0" Background="LightSteelBlue" Text="dinge" FontSize="30" Margin="0,10,0,10"/>
+            <Button x:Name="OpenFolderDialogButton" Grid.Column="2" Margin="0,10,0,10" Content="Ordner Suchen" Background="LightSteelBlue" Click="OpenFolderDialogButton_Click"/>
+        </Grid>
+        
+        <DockPanel x:Name="ButtonPanel" Grid.Row="2" Grid.Column="1">
+            
+        </DockPanel>
+
+        <ListView x:Name="FileListView" Grid.Column="1" Grid.Row="3">
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="Margin" Value="5,0,0,0"/>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView AllowsColumnReorder="True">
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="500" />
+                    <GridViewColumn Header="Extension" DisplayMemberBinding="{Binding Extension}" Width="120"/>
+                    <GridViewColumn Header="Größe" DisplayMemberBinding="{Binding Size, Converter={StaticResource FileSizeConverter}}" Width="120" />
+                    <GridViewColumn Header="Auswahl">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ToggleButton Content="Markieren" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" Width="70" Margin="5,0,0,0"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Reihenfolge" DisplayMemberBinding="{Binding Order}"/>
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
