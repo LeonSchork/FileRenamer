@@ -17,6 +17,7 @@ namespace FileRenamer
         public string Extension { get; set; }
         public long Size { get; set; }
         public string FolderPath { get; set; }
+
         public int? Order
         {
             get => _order;
@@ -26,10 +27,13 @@ namespace FileRenamer
                 {
                     _order = value;
                     OnPropertyChanged(nameof(Order));
+                    OrderChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
+        public static event EventHandler OrderChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

@@ -34,7 +34,10 @@ namespace FileRenamer
             if (folderDialog.ShowDialog() == true)
             {
                 FolderLocationTextBlock.Text = Utility.ShortenPath(folderDialog.FolderName);
+
+                if (_fileItemContainer.FileItems != null) _fileItemContainer.Clear();
                 _fileItemContainer.AddFileItems(folderDialog.FolderName);
+
                 FileListView.ItemsSource = _fileItemContainer.FileItems;
             }
         }

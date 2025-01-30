@@ -13,29 +13,20 @@ namespace FileRenamer
         public FileItemContainer()
         {
             _fileItems = new ObservableCollection<FileItem>();
+            FileItem.OrderChanged += (s, e) => UpdateOrders();
         }
 
         public ObservableCollection<FileItem> FileItems => _fileItems;
 
-        /// <summary>
-        /// Adds a FileItem object to the collection.
-        /// </summary>
-        /// <param name="fileItem">The FileItem object to add.</param>
-        /// <exception cref="ArgumentNullException">Thrown when the fileItem is null.</exception>
         private void AddFileItem(FileItem fileItem)
         {
             if (fileItem == null)
                 throw new ArgumentNullException(nameof(fileItem));
 
             _fileItems.Add(fileItem);
+            //UpdateOrders();
         }
 
-        /// <summary>
-        /// Adds FileItem objects to the collection from the specified directory path.
-        /// </summary>
-        /// <param name="path">The directory path containing files to add.</param>
-        /// <exception cref="ArgumentNullException">Thrown when the path is null or empty.</exception>
-        /// <exception cref="DirectoryNotFoundException">Thrown when the specified path does not exist.</exception>
         public void AddFileItems(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -55,6 +46,24 @@ namespace FileRenamer
                     Size = fileInfo.Length,
                     FolderPath = path
                 });
+            }
+        }
+
+        private void UpdateOrders()
+        {
+            var orderedItems = _fileItems.Where(fi => fi.Order.HasValue)
+                                         .OrderBy(fi => fi.Order)
+                                         .ToList();
+
+            for (int i = 0; i < orderedItems.Count; i++)
+            {
+                orderedItems[i].Order = i + 1;
+            }
+
+            var unOrderedItems = _fileItems.Where(fi => !fi.Order.HasValue).ToList();
+            foreach (var item in unOrderedItems)
+            {
+                item.Order = null;
             }
         }
 
