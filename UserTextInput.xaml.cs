@@ -41,6 +41,9 @@ namespace FileRenamer
         public static readonly DependencyProperty PlaceholderBackgroundProperty =
             DependencyProperty.Register("PlaceholderBackground", typeof(Brush), typeof(UserTextInput), new PropertyMetadata(Brushes.LightSteelBlue));
 
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register("Text", typeof(string), typeof(UserTextInput), new PropertyMetadata(string.Empty, OnTextChanged));
+
         public string PlaceholderText
         {
             get { return (string)GetValue(PlaceholderTextProperty); }
@@ -65,9 +68,27 @@ namespace FileRenamer
             set { SetValue(PlaceholderFontStyleProperty, value); }
         }
 
+        public Brush PlaceholderBackground
+        {
+            get { return (Brush)GetValue(PlaceholderBackgroundProperty); }
+            set { SetValue(PlaceholderBackgroundProperty, value); }
+        }
+
+        public string Text
+        {
+            get { return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
+
+        private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (UserTextInput)d;
+            control.UpdateOverlayLabelVisibility();
+        }
 
         private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            Text = InputTextBox.Text;
             UpdateOverlayLabelVisibility();
         }
 
@@ -83,7 +104,7 @@ namespace FileRenamer
 
         private void UpdateOverlayLabelVisibility()
         {
-            if (string.IsNullOrEmpty(InputTextBox.Text))
+            if (string.IsNullOrEmpty(Text))
             {
                 OverlayLabel.Visibility = Visibility.Visible;
             }

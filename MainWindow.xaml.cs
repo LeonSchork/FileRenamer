@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,9 +14,7 @@ using System.Windows.Shapes;
 
 namespace FileRenamer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         private FileItemContainer _fileItemContainer;
@@ -42,7 +41,7 @@ namespace FileRenamer
             }
         }
 
-        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        private void FileSelectionTB_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is ToggleButton toggleButton && toggleButton.DataContext is FileItem fileItem)
             {
@@ -52,7 +51,7 @@ namespace FileRenamer
             }
         }
 
-        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        private void FileSelectionTB_Unchecked(object sender, RoutedEventArgs e)
         {
             if (sender is ToggleButton toggleButton && toggleButton.DataContext is FileItem fileItem)
             {
@@ -61,5 +60,50 @@ namespace FileRenamer
             }
         }
 
+        private void ExecuteRenameButton_Click(object sender, RoutedEventArgs e)
+        {
+            string namingText = NamingTextbox.Text;
+            int initialNumber = 1;
+            int increment = 1;
+            
+            try
+            {
+                initialNumber = int.Parse(NumberingTextbox.Text);
+                increment = int.Parse(IncrementTextbox.Text);
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show("Bitte fülle die Felder Start Nr. und Inkrement nur mit Zahlen", "Falsche Eingabe", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Utility.CounterOptions renameOptions =
+                NumberingSwitch.IsChecked == true ? Utility.CounterOptions.Suffix : Utility.CounterOptions.Prefix;
+
+            Utility.RenameFiles(_renameList, namingText, renameOptions, initialNumber, increment);
+
+            _renameList.Clear();
+            _fileItemContainer.ClearOrder();
+            FileListView.ItemsSource = null;
+            FileListView.ItemsSource = _fileItemContainer.FileItems;
+        }
+
+        private void MarkAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool areEqual = _renameList.SequenceEqual(_fileItemContainer.FileItems);
+            if (areEqual) 
+            {
+                _renameList.Clear();
+                _fileItemContainer.ClearOrder();
+            }
+            else
+            {
+                foreach (FileItem file in _fileItemContainer.FileItems)
+                {
+                    _renameList.Add(file);
+                    file.Order = _renameList.IndexOf(file) + 1;
+                }
+            }
+        }
     }
 }

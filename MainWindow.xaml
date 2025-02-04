@@ -28,7 +28,6 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <!--<Setter TargetName="SwitchBorder" Property="Background" Value="LightGreen"/>-->
                                 <Setter TargetName="SwitchKnob" Property="HorizontalAlignment" Value="Right"/>
                                 <Setter TargetName="SwitchKnob" Property="Margin" Value="0,0,5,0"/>
                             </Trigger>
@@ -55,54 +54,60 @@
         <!--Folder selection Grid-->
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="15*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="139*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="FolderLocationTextBlock" Grid.Row="0" Grid.Column="0" Background="LightSteelBlue" Text="Ordner Pfad" FontSize="20" Margin="0,5,0,10"/>
-            <Button x:Name="OpenFolderDialogButton" Grid.Column="2" Margin="0,5,0,10" Content="Ordner Suchen" Background="LightSteelBlue" Click="OpenFolderDialogButton_Click"/>
+            <TextBlock x:Name="FolderLocationTextBlock" Grid.Row="0" Grid.Column="0" Background="LightSteelBlue" Text="Ordner Suchen" FontSize="18" Margin="0,5,0,10" Padding="2"/>
+            <Button x:Name="OpenFolderDialogButton" ToolTip="Öffnet den Datai-Explorer" Grid.Column="2" Margin="0,5,0,10" Content="Ordner Suchen" Background="LightSteelBlue" Click="OpenFolderDialogButton_Click"/>
         </Grid>
-        
+
         <!--File customisation Grid-->
         <Grid Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <local:UserTextInput x:Name="NamingTextbox" Grid.Column="0" PlaceholderText="Dateiname eigeben" Margin="0,0,10,0"/>
-            <!--<TextBox x:Name="NamingTextbox" Grid.Column="0" Text="test" Style="{StaticResource defaultTextbox}"/>-->
-            <local:UserTextInput x:Name="NumberingTextbox" Grid.Column="1" PlaceholderText="Nummer"/>
-            <DockPanel Grid.Column="2" Margin="10,0,0,0">
+
+            <local:UserTextInput x:Name="NamingTextbox" ToolTip="Gib den gewünschten Namen ein" Grid.Column="0" PlaceholderText="Dateiname eigeben" Margin="0"/>
+            <local:UserTextInput x:Name="NumberingTextbox" ToolTip="Gib eine Nummer ein, mit der die Nummerierung starten soll" Grid.Column="1" PlaceholderText="Start Nr" Margin="5,0"/>
+            <local:UserTextInput x:Name="IncrementTextbox" PlaceholderText="Inkrement" Grid.Column="2" Margin="5,0"/>
+            <DockPanel Grid.Column="3" Margin="5,0">
                 <TextBlock Text="Präfix" Background="Transparent" VerticalAlignment="Center"/>
-                <ToggleButton Grid.Column="2" Style="{StaticResource FlipSwitchStyle}"/>
+                <ToggleButton x:Name="NumberingSwitch" ToolTip="Wähle aus, ob die Nummerierung vor oder nach dem Namen gesetzt werden soll" Grid.Column="2" Style="{StaticResource FlipSwitchStyle}"/>
                 <TextBlock Text="Suffix" Background="Transparent" VerticalAlignment="Center"/>
             </DockPanel>
-            <Button x:Name="ExecuteRenameButton" Content="Umbenennen" Grid.Column="3"/>
+            <Button x:Name="MarkAllButton" Content="Alles Markieren" Grid.Column="4" Background="LightSteelBlue" Margin="10,0,5,0" Click="MarkAllButton_Click"/>
+            <Button x:Name="ExecuteRenameButton" Content="Umbenennen" ToolTip="Setze deine ausgewählte Dateibenennung um" Grid.Column="5" Background="LightSteelBlue" Click="ExecuteRenameButton_Click"/>
         </Grid>
-        
+
         <!--File display-->
         <ListView x:Name="FileListView" Grid.Column="1" Grid.Row="3">
             <ListView.Resources>
-                <Style TargetType="{x:Type GridViewColumnHeader}">
+                <Style TargetType="GridViewColumnHeader">
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                     <Setter Property="Margin" Value="5,0,0,0"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 </Style>
+
             </ListView.Resources>
-            <ListView.View>
-                <GridView AllowsColumnReorder="True">
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="500" />
-                    <GridViewColumn Header="Extension" DisplayMemberBinding="{Binding Extension}" Width="120"/>
-                    <GridViewColumn Header="Größe" DisplayMemberBinding="{Binding Size, Converter={StaticResource FileSizeConverter}}" Width="120" />
-                    <GridViewColumn Header="Auswahl">
+            <ListView.View >
+                <GridView AllowsColumnReorder="False" >
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="550" />
+                    <GridViewColumn Header="Extension" DisplayMemberBinding="{Binding Extension}" Width="100"/>
+                    <GridViewColumn Header="Größe" DisplayMemberBinding="{Binding Size, Converter={StaticResource FileSizeConverter}}" Width="80"/>
+                    <GridViewColumn Header="Auswahl" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <ToggleButton Content="Markieren" Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked" Width="70" Margin="5,0,0,0"/>
+                                <ToggleButton Content="Markieren" ToolTip="Wähle eine Reihefolge für die Umbenennung aus" Checked="FileSelectionTB_Checked" Unchecked="FileSelectionTB_Unchecked" Width="70" Margin="5,0,0,0"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Reihenfolge" DisplayMemberBinding="{Binding Order}"/>
+                    <GridViewColumn Header="Reihenfolge" DisplayMemberBinding="{Binding Order}" Width="120"/>
 
                 </GridView>
             </ListView.View>

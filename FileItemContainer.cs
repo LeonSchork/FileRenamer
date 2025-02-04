@@ -67,6 +67,14 @@ namespace FileRenamer
             }
         }
 
+        public void ClearOrder()
+        {
+            foreach (var fileItem in FileItems)
+            {
+                fileItem.Order = null;
+            }
+        }
+
         public void Clear()
         {
             _fileItems.Clear();

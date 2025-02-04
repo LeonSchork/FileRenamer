@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FileRenamer
 {
     public partial class Utility
     {
-        public enum RenameOptions
+        public enum CounterOptions
         {
             Prefix,
             Suffix
@@ -39,32 +40,39 @@ namespace FileRenamer
         }
 
         /// <summary>
-        /// Renames a list of files by adding a prefix or suffix to their names.
+        /// Renames the items in a list of files and adds a counter as either prefix or suffix.
         /// </summary>
         /// <param name="files">The list of files to rename.</param>
         /// <param name="name">The name to add as a prefix or suffix.</param>
         /// <param name="option">Specifies whether to add the name as a prefix or suffix.</param>
-        /// <param name="counter">The starting counter value for the renaming. Default is 1.</param>
-        /// <param name="increment">The increment value for the counter. Default is 1.</param>
-        public void RenameFiles(List<FileItem> files, string name, Utility.RenameOptions option, int counter = 1, int increment = 1)
+        /// <param name="initialNumber">The starting counter value for the renaming.</param>
+        /// <param name="increment">The increment value for the counter.</param>
+        public static void RenameFiles(List<FileItem> files, string name, Utility.CounterOptions option, int initialNumber, int increment)
         {
+            if(name == null)
+            { 
+                MessageBox.Show("Bitte gib einen Dateinamen an");
+                return;
+            }
+
+
             foreach (FileItem file in files)
             {
                 string newName = file.Name;
                 switch (option)
                 {
-                    case RenameOptions.Prefix:
-                        newName = $"{counter}_{name}";
+                    case CounterOptions.Prefix:
+                        newName = $"{initialNumber}{name}";
                         break;
-                    case RenameOptions.Suffix:
-                        newName = $"{name}_{counter}";
+                    case CounterOptions.Suffix:
+                        newName = $"{name}{initialNumber}";
                         break;
                 }
 
                 string newFilePath = Path.Combine(file.FolderPath, newName + file.Extension);
                 File.Move(Path.Combine(file.FolderPath, file.Name + file.Extension), newFilePath);
                 file.Name = newName;
-                counter += increment;
+                initialNumber += increment;
             }
         }
 
