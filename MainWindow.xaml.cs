@@ -1,30 +1,67 @@
-﻿using Microsoft.Win32;
-using System.IO;
-using System.Text;
+﻿using FileRenamer.Languages;
+using Microsoft.Win32;
+using System.ComponentModel;
+using System.Configuration;
+using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FileRenamer
 {
 
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private FileItemContainer _fileItemContainer;
         private List<FileItem> _renameList = new();
+        private bool _isAnyItemMarked;
+        private bool _isStartup = true;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainWindow()
         {
             InitializeComponent();
             _fileItemContainer = new FileItemContainer();
+            DataContext = this;
+            FileItem.OrderChanged += FileItem_OrderChanged;
 
+            LanguageComboBox.ItemsSource = LanguageManager.LanguageSelections;
+
+            CultureInfo currentCulture = CultureInfo.CurrentCulture;
+            string[] cultureName = currentCulture.Name.Split("-");
+
+            foreach (LanguageSelection item in LanguageManager.LanguageSelections)
+            {
+                if (item.Culture.ToString() == cultureName[0])
+                {
+                    LanguageComboBox.SelectedItem = item;
+                    break;
+                }
+            }
+
+            _isStartup = false;
+        }
+
+        public bool IsAnyItemMarked
+        {
+            get { return _isAnyItemMarked; }
+            set
+            {
+                _isAnyItemMarked = value;
+                OnPropertyChanged(nameof(IsAnyItemMarked));
+            }
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void FileItem_OrderChanged(object sender, EventArgs e)
+        {
+            UpdateIsAnyItemMarked();
         }
 
         private void OpenFolderDialogButton_Click(object sender, RoutedEventArgs e)
@@ -41,22 +78,35 @@ namespace FileRenamer
             }
         }
 
-        private void FileSelectionTB_Checked(object sender, RoutedEventArgs e)
+        private void FileSelectionTB_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is ToggleButton toggleButton && toggleButton.DataContext is FileItem fileItem)
+            var button = (Button)sender;
+            var fileItem = (FileItem)button.DataContext;
+
+            if(fileItem.Order == null)
             {
                 _renameList.Add(fileItem);
-                fileItem.Order = _renameList.IndexOf(fileItem) + 1;
-
+                    fileItem.Order = _renameList.IndexOf(fileItem) + 1;
             }
-        }
-
-        private void FileSelectionTB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (sender is ToggleButton toggleButton && toggleButton.DataContext is FileItem fileItem)
+            else
             {
                 _renameList.Remove(fileItem);
                 fileItem.Order = null;
+            }
+        }
+
+        private void UpdateIsAnyItemMarked()
+        {
+            IsAnyItemMarked = _renameList.Any();
+            if (IsAnyItemMarked)
+            {
+                MarkAllButton.Visibility = Visibility.Collapsed;
+                ClearAllButton.Visibility = Visibility.Visible;
+            }
+            else if (!IsAnyItemMarked)
+            {
+                MarkAllButton.Visibility = Visibility.Visible;
+                ClearAllButton.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -65,7 +115,7 @@ namespace FileRenamer
             string namingText = NamingTextbox.Text;
             int initialNumber = 1;
             int increment = 1;
-            
+
             try
             {
                 initialNumber = int.Parse(NumberingTextbox.Text);
@@ -86,24 +136,42 @@ namespace FileRenamer
             _fileItemContainer.ClearOrder();
             FileListView.ItemsSource = null;
             FileListView.ItemsSource = _fileItemContainer.FileItems;
+            UpdateIsAnyItemMarked();
         }
 
         private void MarkAllButton_Click(object sender, RoutedEventArgs e)
         {
-            bool areEqual = _renameList.SequenceEqual(_fileItemContainer.FileItems);
-            if (areEqual) 
+            foreach (FileItem file in _fileItemContainer.FileItems)
             {
-                _renameList.Clear();
-                _fileItemContainer.ClearOrder();
+                _renameList.Add(file);
+                file.Order = _renameList.IndexOf(file) + 1;
             }
-            else
+            
+            UpdateIsAnyItemMarked();
+        }
+
+        private void ClearAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            _renameList.Clear();
+            _fileItemContainer.ClearOrder();
+            UpdateIsAnyItemMarked();
+        }
+
+        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MessageBoxResult result = MessageBoxResult.None;
+            if (!_isStartup)
             {
-                foreach (FileItem file in _fileItemContainer.FileItems)
-                {
-                    _renameList.Add(file);
-                    file.Order = _renameList.IndexOf(file) + 1;
-                }
+                result = MessageBox.Show(Resource.RestartMessage, Resource.RestartTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            }
+            if(result == MessageBoxResult.Yes || result == MessageBoxResult.None)
+            {
+                LanguageSelection selectedLanguage = (LanguageSelection)LanguageComboBox.SelectedItem;
+
+                LanguageManager.UpdateLanguageSetting(selectedLanguage.Culture, _isStartup);
+
             }
         }
+
     }
 }

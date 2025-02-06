@@ -32,8 +32,8 @@ namespace FileRenamer
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         public static event EventHandler OrderChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

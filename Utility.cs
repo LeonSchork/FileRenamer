@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Diagnostics;
 
 namespace FileRenamer
 {
@@ -74,6 +75,17 @@ namespace FileRenamer
                 file.Name = newName;
                 initialNumber += increment;
             }
+        }
+
+        public static void RestartApplication()
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = Process.GetCurrentProcess().MainModule.FileName,
+                UseShellExecute = true
+            };
+            Process.Start(startInfo);
+            Application.Current.Shutdown();
         }
 
     }

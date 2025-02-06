@@ -1,4 +1,0 @@
-﻿- checkboxen reihenfolge festhalten
-	- potenziell custom check mit zahl
-	- zahl vor der box einblenden
-- Umbenennung

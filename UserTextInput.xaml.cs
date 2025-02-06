@@ -30,7 +30,7 @@ namespace FileRenamer
             DependencyProperty.Register("PlaceholderText", typeof(string), typeof(UserTextInput), new PropertyMetadata("Enter text here..."));
 
         public static readonly DependencyProperty PlaceholderForegroundProperty =
-            DependencyProperty.Register("PlaceholderForeground", typeof(Brush), typeof(UserTextInput), new PropertyMetadata(Brushes.Gray));
+            DependencyProperty.Register("PlaceholderForeground", typeof(Brush), typeof(UserTextInput), new PropertyMetadata(Brushes.Black));
 
         public static readonly DependencyProperty PlaceholderFontSizeProperty =
             DependencyProperty.Register("PlaceholderFontSize", typeof(double), typeof(UserTextInput), new PropertyMetadata(12.0));
