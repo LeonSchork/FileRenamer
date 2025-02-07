@@ -201,4 +201,10 @@
   <data name="RestartTitle" xml:space="preserve">
     <value>Spracheinstellungen übernehmen</value>
   </data>
+  <data name="ExecuteRenameErrorMessage" xml:space="preserve">
+    <value>Bitte fülle die Felder Start Nr. und Inkrement nur mit Zahlen</value>
+  </data>
+  <data name="InvalideInputTitle" xml:space="preserve">
+    <value>Ungültige Eingabe</value>
+  </data>
 </root>

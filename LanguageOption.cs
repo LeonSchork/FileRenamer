@@ -7,13 +7,13 @@ using System.Windows.Media;
 
 namespace FileRenamer
 {
-    public class LanguageSelection
+    public class LanguageOption
     {
         public ImageSource Icon { get; set; }
         public string Culture { get; set; }
         public string Language { get; set; }
 
-        public LanguageSelection(string language, string culture, ImageSource icon)
+        public LanguageOption(string language, string culture, ImageSource icon)
         {
             Language = language;
             Culture = culture;

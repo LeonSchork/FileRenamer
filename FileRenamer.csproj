@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AssemblyInfo.cs" />
     <Compile Remove="LocalizationService.cs" />
   </ItemGroup>
 

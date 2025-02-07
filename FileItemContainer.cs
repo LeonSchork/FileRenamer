@@ -24,7 +24,6 @@ namespace FileRenamer
                 throw new ArgumentNullException(nameof(fileItem));
 
             _fileItems.Add(fileItem);
-            //UpdateOrders();
         }
 
         public void AddFileItems(string path)
@@ -32,6 +31,7 @@ namespace FileRenamer
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
 
+            //TODO localize exception message
             if (!Directory.Exists(path))
                 throw new DirectoryNotFoundException($"The directory '{path}' does not exist.");
 

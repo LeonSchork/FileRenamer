@@ -42,7 +42,7 @@
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="15*"/>
@@ -50,7 +50,7 @@
         </Grid.RowDefinitions>
 
          <!--Language Selection ComboBox-->
-        <ComboBox x:Name="LanguageComboBox" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,898,0" Padding="3" SelectionChanged="LanguageComboBox_SelectionChanged">
+        <ComboBox x:Name="LanguageComboBox" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,913,0" Padding="3" SelectionChanged="LanguageComboBox_SelectionChanged">
             <ComboBox.ItemTemplate>
                 <ItemContainerTemplate>
                     <WrapPanel>
@@ -90,9 +90,9 @@
                 <ToggleButton x:Name="NumberingSwitch" ToolTip="{x:Static p:Resource.NumberingSwitchToolTip}" Grid.Column="2" Style="{StaticResource FlipSwitchStyle}"/>
                 <TextBlock Text="{x:Static p:Resource.SuffixText}" Background="Transparent" VerticalAlignment="Center"/>
             </DockPanel>
-            <Button x:Name="MarkAllButton" Content="{x:Static p:Resource.MarkAllButtonText}" ToolTip="{x:Static p:Resource.MarkButtonToolTip}" Grid.Column="4" Background="LightSteelBlue" Margin="10,5,5,5" Click="MarkAllButton_Click"/>
-            <Button x:Name="ClearAllButton" Content="{x:Static p:Resource.ClearAllButtonText}" ToolTip="{x:Static p:Resource.ClearButtonToolTip}" Grid.Column="4" Background="LightSteelBlue" Margin="10,0,5,0" Click="ClearAllButton_Click" Visibility="Collapsed"/>
-            <Button x:Name="ExecuteRenameButton" Content="{x:Static p:Resource.ExecuteRenameButtonText}" ToolTip="{x:Static p:Resource.ExecuteRenameButtonToolTip}" Grid.Column="5" Background="LightSteelBlue" Margin="0,5" Click="ExecuteRenameButton_Click"/>
+            <Button x:Name="MarkAllButton" Content="{x:Static p:Resource.MarkAllButtonText}" ToolTip="{x:Static p:Resource.MarkButtonToolTip}" Grid.Column="4" Background="LightSteelBlue" Margin="10,2,5,2" Click="MarkAllButton_Click"/>
+            <Button x:Name="ClearAllButton" Content="{x:Static p:Resource.ClearAllButtonText}" ToolTip="{x:Static p:Resource.ClearButtonToolTip}" Grid.Column="4" Background="LightSteelBlue" Margin="10,2,5,2" Click="ClearAllButton_Click" Visibility="Collapsed"/>
+            <Button x:Name="ExecuteRenameButton" Content="{x:Static p:Resource.ExecuteRenameButtonText}" ToolTip="{x:Static p:Resource.ExecuteRenameButtonToolTip}" Grid.Column="5" Background="LightSteelBlue" Margin="0,2,0,2" Click="ExecuteRenameButton_Click"/>
         </Grid>
 
         <!--File display-->
@@ -107,19 +107,18 @@
 
             </ListView.Resources>
             <ListView.View >
-                <GridView AllowsColumnReorder="False" >
+                <GridView AllowsColumnReorder="False">
                     <GridViewColumn Header="{x:Static p:Resource.NameColumnHeader}" DisplayMemberBinding="{Binding Name}" Width="550" />
                     <GridViewColumn Header="{x:Static p:Resource.ExtensionColumnHeader}" DisplayMemberBinding="{Binding Extension}" Width="100"/>
                     <GridViewColumn Header="{x:Static p:Resource.SizeColumnHeader}" DisplayMemberBinding="{Binding Size, Converter={StaticResource FileSizeConverter}}" Width="80"/>
                     <GridViewColumn Header="{x:Static p:Resource.SelectionColumnHeader}" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="SelectionButton" Content="{x:Static p:Resource.MarkButtonText}" ToolTip="{x:Static p:Resource.MarkButtonToolTip}" Click="FileSelectionTB_Click" Width="70" Margin="5,0,0,0"/>
+                                <Button x:Name="SelectionButton" Content="{x:Static p:Resource.MarkButtonText}" ToolTip="{x:Static p:Resource.MarkButtonToolTip}" Click="FileSelectionButton_Click" Width="70" Margin="5,0,0,0"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="{x:Static p:Resource.OrderColumnHeader}" DisplayMemberBinding="{Binding Order}" Width="120"/>
-
                 </GridView>
             </ListView.View>
         </ListView>

@@ -9,13 +9,13 @@ namespace FileRenamer
 {
     public static class LanguageManager
     {
-        private static readonly List<LanguageSelection> languageSelections = new List<LanguageSelection>
+        private static readonly List<LanguageOption> languageSelections = new List<LanguageOption>
         {
-            new LanguageSelection("English", "en", new BitmapImage(new Uri("/FileRenamer;component/Icons/en.png", UriKind.Relative))) ,
-            new LanguageSelection("German", "de", new BitmapImage(new Uri("/FileRenamer;component/Icons/de.png", UriKind.Relative)))
+            new LanguageOption("English", "en", new BitmapImage(new Uri("/FileRenamer;component/Icons/en.png", UriKind.Relative))) ,
+            new LanguageOption("German", "de", new BitmapImage(new Uri("/FileRenamer;component/Icons/de.png", UriKind.Relative)))
         };
 
-        public static List<LanguageSelection> LanguageSelections => languageSelections;
+        public static List<LanguageOption> LanguageSelections => languageSelections;
 
         public static void UpdateLanguageSetting(string culture, bool isStartup)
         {
@@ -29,7 +29,7 @@ namespace FileRenamer
             }
             else
             {
-                MessageBox.Show("SelectedLanguage key is missing in the configuration file. English will be applied as default");
+                MessageBox.Show("SelectedLanguage key is missing in the configuration file. English will be applied by default");
             }
         }
     }

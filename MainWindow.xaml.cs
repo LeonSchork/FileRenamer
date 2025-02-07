@@ -29,19 +29,65 @@ namespace FileRenamer
 
             LanguageComboBox.ItemsSource = LanguageManager.LanguageSelections;
 
-            CultureInfo currentCulture = CultureInfo.CurrentCulture;
-            string[] cultureName = currentCulture.Name.Split("-");
-
-            foreach (LanguageSelection item in LanguageManager.LanguageSelections)
+            string savedCulture = ConfigurationManager.AppSettings["SelectedLanguage"];
+            if (!string.IsNullOrEmpty(savedCulture))
             {
-                if (item.Culture.ToString() == cultureName[0])
+                foreach (LanguageOption item in LanguageManager.LanguageSelections)
                 {
-                    LanguageComboBox.SelectedItem = item;
-                    break;
+                    if (item.Culture == savedCulture)
+                    {
+                        LanguageComboBox.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                CultureInfo currentCulture = CultureInfo.CurrentCulture;
+                string[] cultureName = currentCulture.Name.Split('-');
+                foreach (LanguageOption item in LanguageManager.LanguageSelections)
+                {
+                    if (item.Culture.ToString() == cultureName[0])
+                    {
+                        LanguageComboBox.SelectedItem = item;
+                        break;
+                    }
                 }
             }
 
             _isStartup = false;
+        }
+
+
+        private void OpenFolderDialogButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFolderDialog folderDialog = new();
+            if (folderDialog.ShowDialog() == true)
+            {
+                FolderLocationTextBlock.Text = Utility.ShortenPath(folderDialog.FolderName);
+
+                if (_fileItemContainer.FileItems != null) _fileItemContainer.Clear();
+                _fileItemContainer.AddFileItems(folderDialog.FolderName);
+
+                FileListView.ItemsSource = _fileItemContainer.FileItems;
+            }
+        }
+
+        private void FileSelectionButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var fileItem = (FileItem)button.DataContext;
+
+            if(fileItem.Order == null)
+            {
+                _renameList.Add(fileItem);
+                    fileItem.Order = _renameList.IndexOf(fileItem) + 1;
+            }
+            else
+            {
+                _renameList.Remove(fileItem);
+                fileItem.Order = null;
+            }
         }
 
         public bool IsAnyItemMarked
@@ -61,41 +107,10 @@ namespace FileRenamer
 
         private void FileItem_OrderChanged(object sender, EventArgs e)
         {
-            UpdateIsAnyItemMarked();
+            UpdateSelectAllButton();
         }
 
-        private void OpenFolderDialogButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFolderDialog folderDialog = new();
-            if (folderDialog.ShowDialog() == true)
-            {
-                FolderLocationTextBlock.Text = Utility.ShortenPath(folderDialog.FolderName);
-
-                if (_fileItemContainer.FileItems != null) _fileItemContainer.Clear();
-                _fileItemContainer.AddFileItems(folderDialog.FolderName);
-
-                FileListView.ItemsSource = _fileItemContainer.FileItems;
-            }
-        }
-
-        private void FileSelectionTB_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender;
-            var fileItem = (FileItem)button.DataContext;
-
-            if(fileItem.Order == null)
-            {
-                _renameList.Add(fileItem);
-                    fileItem.Order = _renameList.IndexOf(fileItem) + 1;
-            }
-            else
-            {
-                _renameList.Remove(fileItem);
-                fileItem.Order = null;
-            }
-        }
-
-        private void UpdateIsAnyItemMarked()
+        private void UpdateSelectAllButton()
         {
             IsAnyItemMarked = _renameList.Any();
             if (IsAnyItemMarked)
@@ -113,17 +128,20 @@ namespace FileRenamer
         private void ExecuteRenameButton_Click(object sender, RoutedEventArgs e)
         {
             string namingText = NamingTextbox.Text;
-            int initialNumber = 1;
-            int increment = 1;
+            int initialNumber;
+            int increment;
 
             try
             {
-                initialNumber = int.Parse(NumberingTextbox.Text);
-                increment = int.Parse(IncrementTextbox.Text);
+                initialNumber = string.IsNullOrEmpty(NumberingTextbox.Text) ? 1 : int.Parse(NumberingTextbox.Text);
+                increment = string.IsNullOrEmpty(IncrementTextbox.Text) ? 1 : int.Parse(IncrementTextbox.Text);
+
             }
             catch (FormatException ex)
             {
-                MessageBox.Show("Bitte fülle die Felder Start Nr. und Inkrement nur mit Zahlen", "Falsche Eingabe", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Resource.ExecuteRenameErrorMessage, Resource.InvalideInputTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                NumberingTextbox.Text = null;
+                IncrementTextbox.Text = null;
                 return;
             }
 
@@ -136,7 +154,7 @@ namespace FileRenamer
             _fileItemContainer.ClearOrder();
             FileListView.ItemsSource = null;
             FileListView.ItemsSource = _fileItemContainer.FileItems;
-            UpdateIsAnyItemMarked();
+            UpdateSelectAllButton();
         }
 
         private void MarkAllButton_Click(object sender, RoutedEventArgs e)
@@ -146,15 +164,14 @@ namespace FileRenamer
                 _renameList.Add(file);
                 file.Order = _renameList.IndexOf(file) + 1;
             }
-            
-            UpdateIsAnyItemMarked();
+            UpdateSelectAllButton();
         }
 
         private void ClearAllButton_Click(object sender, RoutedEventArgs e)
         {
             _renameList.Clear();
             _fileItemContainer.ClearOrder();
-            UpdateIsAnyItemMarked();
+            UpdateSelectAllButton();
         }
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -166,7 +183,7 @@ namespace FileRenamer
             }
             if(result == MessageBoxResult.Yes || result == MessageBoxResult.None)
             {
-                LanguageSelection selectedLanguage = (LanguageSelection)LanguageComboBox.SelectedItem;
+                LanguageOption selectedLanguage = (LanguageOption)LanguageComboBox.SelectedItem;
 
                 LanguageManager.UpdateLanguageSetting(selectedLanguage.Culture, _isStartup);
 

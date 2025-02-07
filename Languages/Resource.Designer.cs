@@ -97,6 +97,15 @@ namespace FileRenamer.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please fill in the fields Start No. and Increment with numbers only.
+        /// </summary>
+        public static string ExecuteRenameErrorMessage {
+            get {
+                return ResourceManager.GetString("ExecuteRenameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extension.
         /// </summary>
         public static string ExtensionColumnHeader {
@@ -129,6 +138,15 @@ namespace FileRenamer.Languages {
         public static string IncrementTBText {
             get {
                 return ResourceManager.GetString("IncrementTBText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Input.
+        /// </summary>
+        public static string InvalideInputTitle {
+            get {
+                return ResourceManager.GetString("InvalideInputTitle", resourceCulture);
             }
         }
         

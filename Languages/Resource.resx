@@ -201,4 +201,10 @@
   <data name="RestartTitle" xml:space="preserve">
     <value>Apply language settings?</value>
   </data>
+  <data name="ExecuteRenameErrorMessage" xml:space="preserve">
+    <value>Please fill in the fields Start No. and Increment with numbers only</value>
+  </data>
+  <data name="InvalideInputTitle" xml:space="preserve">
+    <value>Invalid Input</value>
+  </data>
 </root>
