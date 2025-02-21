@@ -35,8 +35,9 @@ namespace FileRenamer
             }
 
             string lastTwoFolders = Path.Combine(parts[^2], parts[^1]);
-            string shortenedFolders = string.Join
-                (Path.DirectorySeparatorChar.ToString(), parts.Take(parts.Length - 2).Select(f => f.Substring(0, 2)));
+            string shortenedFolders = string.Join(
+                Path.DirectorySeparatorChar.ToString(),
+                parts.Take(parts.Length - 2).Select(f => f.Length >= 2 ? f.Substring(0, 2) : f));
             return Path.Combine(root, shortenedFolders, lastTwoFolders);
         }
 
@@ -56,6 +57,7 @@ namespace FileRenamer
                 return;
             }
 
+            int fileListLength = files.Count.ToString().Length;
 
             foreach (FileItem file in files)
             {
@@ -63,7 +65,7 @@ namespace FileRenamer
                 switch (option)
                 {
                     case CounterOptions.Prefix:
-                        newName = $"{initialNumber}{name}";
+                        newName = $"{initialNumber.ToString().PadLeft(fileListLength, '0')}{name}";
                         break;
                     case CounterOptions.Suffix:
                         newName = $"{name}{initialNumber}";
@@ -76,6 +78,7 @@ namespace FileRenamer
                 initialNumber += increment;
             }
         }
+
 
         public static void RestartApplication()
         {

@@ -39,7 +39,7 @@ namespace FileRenamer
             DependencyProperty.Register("PlaceholderFontStyle", typeof(FontStyle), typeof(UserTextInput), new PropertyMetadata(FontStyles.Italic));
 
         public static readonly DependencyProperty PlaceholderBackgroundProperty =
-            DependencyProperty.Register("PlaceholderBackground", typeof(Brush), typeof(UserTextInput), new PropertyMetadata(Brushes.LightSteelBlue));
+            DependencyProperty.Register("PlaceholderBackground", typeof(Brush), typeof(UserTextInput), new PropertyMetadata(new SolidColorBrush((Color)ColorConverter.ConvertFromString("#03b7a2"))));
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(UserTextInput), new PropertyMetadata(string.Empty, OnTextChanged));

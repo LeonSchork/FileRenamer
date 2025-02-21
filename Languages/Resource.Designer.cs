@@ -322,7 +322,7 @@ namespace FileRenamer.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename Files.
+        ///   Looks up a localized string similar to F2 - Rename Files.
         /// </summary>
         public static string Title {
             get {
